@@ -1,0 +1,306 @@
+<html>
+    <head>
+        <title>To-Do</title>
+    </head>
+    <script src='hosted/scripts/jquery-ui.min.js'></script>
+    <script src='hosted/scripts/jquery.min.js'></script>
+    <script src='hosted/scripts/SmoothScroll.js'></script>
+    <link href="hosted/fonts/material-icons/font.css" type="text/css" rel="stylesheet"/>
+    <link href="hosted/stylesheets/jquery-ui.css" rel="stylesheet" type='text/css'/>
+    <style>
+        body
+        {
+            margin: 0;
+            background-color:rgba(30,30,35,1);
+            overflow: hidden;
+            background-image:url("todo.img/back.jpg");
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
+        }
+        #navbar
+        {
+            width:92%;
+            position:fixed;
+            height:80px;
+            margin:0 4%;
+            z-index: +40;
+            top:0;
+            border-bottom:2px solid rgba(255,255,255,0.1);
+        }
+        ::-webkit-scrollbar
+        {
+            display: none;
+        }
+        #page
+        {
+            width:100%;
+            position: relative;
+            margin:80px 0px;
+            padding: 80px 4%;
+            box-sizing: border-box;
+            display: block;
+            background:rgba(0,0,0,0.2);
+            overflow-Y:scroll;
+            height:100%;
+        }
+        .wrapper>div>li
+        {
+            width:275px;
+            position: relative;
+            margin: 25px;
+            min-height:150px;
+            float:left;
+            clear: both;
+            background: rgba(0,0,0,0.7);
+            list-style-type: none;
+            border:1px solid rgba(255,255,255,0.2);
+            padding-bottom: 20px;
+        }
+        .wrapper>div
+        {
+            float: left;
+            display: block;
+        }
+        .wrapper
+        {
+            margin: 0px auto;
+            position: relative;
+            display: inline-block;
+            min-height: 10px;
+            left: 50%;
+            padding-bottom:100px;
+            transform: translateX(-50%);
+            box-sizing: border-box;
+        }
+        #navbar>input
+        {
+            background: transparent;
+            border:none;
+            line-height: 80px;
+            height:80px;
+            outline:none;
+            color:white;
+            font-family: 'Segoe UI';
+            font-weight:100;
+            font-size:30px;
+            width:70%;
+            margin:0 15%;
+        }
+        .wrapper>div>li>.title
+        {
+            min-height:60px;
+            line-height: 60px;
+            background:rgba(0,0,0,0.5);
+            color:#004AEF;
+            display: inline-block;
+            width:100%;
+            box-sizing: border-box;
+            padding:0px 5%;
+            font-size: 30px;
+            font-family:'Segoe UI';
+            font-weight: 300;
+            outline:none;
+        }
+        .wrapper>div>li>.title:focus
+        {
+            box-shadow:0px 0px 0px 2px rgba(255,255,255,0.5);
+        }
+        .wrapper>div>li>.list
+        {
+            display: block;
+            width: 90%;
+            border-top:1px solid rgba(255,255,255,0.1);
+            list-style-type:none;
+            padding: 10px 0px;
+            box-sizing: border-box;
+            margin: 0 5%;
+        }
+        .wrapper>div>li>.list>div>div.checkbox
+        {
+            border:2px solid rgba(180,180,180,1);
+            border-radius:2px; 
+            box-sizing: border-box;
+            transition:all 0.2s;
+            line-height: 10px;
+            color:#004AEF;
+            -webkit-text-stroke:2px;
+            margin-right:10px;
+        }
+        .wrapper>div>li>.list>div.active>div.checkbox
+        {
+            background: rgba(180,180,180,1);
+        }
+        .wrapper>div>li>.list>div.new>span
+        {
+            color:rgb(90,90,90);
+            cursor: pointer;
+        }
+        .wrapper>div>li>.list>div.new>div.checkbox
+        {
+            visibility: hidden;
+        }
+        .wrapper>div>li>.list>div>div.checkbox:active
+        {
+            box-shadow:0px 0px 0px 5px rgb(180,180,180) inset;
+        }
+        .wrapper>div>li>.list>div>div
+        {
+            font-size:10px;
+            text-align: center;
+            float:left;
+            display: inline-block;
+            width: 14px;
+            height:14px;
+            margin-top:8px;
+            cursor:pointer;
+            font-size:10px;
+        }
+        .wrapper>div>li>.list>div>div.close
+        {
+            line-height: 14px;
+            position: absolute;
+            right:0px;
+            opacity: 0;
+        }
+        .wrapper>div>li>.list>div>div.close.active
+        {
+            opacity: 1;
+        }
+        .wrapper>div>li>.list>div>span
+        {
+            float: left;
+            line-height: 30px;
+            display: inline-block;
+            outline:none;
+            width: 210px;
+            border-radius:3px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow:hidden;
+            cursor: default;
+        }
+        .wrapper>div>li>.list>div>span:focus
+        {
+            background:rgba(255,255,255,0.03);
+            text-overflow:unset;
+            white-space: normal;
+            cursor: text;
+        }
+        .wrapper>div>li>.list>div.active
+        {
+            opacity:0.5;
+            background: rgba(0,0,0,0.5);
+        }
+        .wrapper>div>li>.list>div:focus
+        {
+            border:1px dotted rgba(180,180,180,1);
+        }
+        .wrapper>div>li>.list>div
+        {
+            display: inline-flex;
+            width: 95%;
+            position: relative;
+            float: left;
+            white-space: nowrap;
+            font-family: 'Segoe UI';
+            font-size:15px;
+            color:rgba(180,180,180,1);    
+            line-height: 30px;
+            overflow:hidden;
+            padding:0px 10px;
+            margin-left:-5px;
+            transition: opacity 0.2s;
+        }
+        .wrapper>div>li>.list>div:hover
+        {
+            overflow: visible;
+        }
+        *
+        {
+            -webkit-user-select:none;
+        }
+    </style>
+    <body>
+        <div id="navbar">
+            <input id='newList' type="text" placeholder="Make a note ..."/>
+        </div>
+        <div id="page">
+            <div class='wrapper'>
+                <div>
+                </div>
+                <div>
+                </div>
+                <div>
+                </div>
+                
+                
+            </div>
+        </div>
+    </body>
+    <script>
+        counter=0;
+        $('document').ready(function(){
+            refresh();
+            refreshButton();
+        });
+        function refreshButton()
+        {
+            $('div.new').click(function(){
+                var $newItem=$("<div><div class='checkbox material-icons'></div><span class='list_text' contenteditable='true'></span><div class='close material-icons'>close</div></div>");
+                $newItem.insertBefore($(this));
+                $newItem.find('span').focus();
+                refresh();
+            });
+        }
+        $('#newList').keyup(function(e){
+            if(e.which==13)
+                {
+                    
+                    $newItem=$("<li><div class='title' contenteditable='true'>"+$(this).val().trim()+"</div><div class='list'><div class='new'><div class='checkbox'></div><span>+ List Item</span></div></div></li>");
+                    $('#page>.wrapper>div').eq(counter%3).prepend($newItem);
+                    $newItem.find('.list_text').focus();
+                    counter++;
+                    $(this).val('');
+                    refreshButton();
+                    refresh();
+                }
+        });
+        function refresh()
+        {
+            $('.checkbox').click(function(){
+                $(this).parent().toggleClass('active');
+                if($(this).parent().hasClass('active'))
+                    {
+                        $(this).html('check');
+                        $(this).parent().find('.list_text').attr('contenteditable','false');
+                    }
+                else 
+                    {
+                        $(this).html('');
+                        $(this).parent().find('.list_text').attr('contenteditable','true');
+                    }
+            });
+            $('.list_text').keyup(function(e){
+                if(e.which==13){
+                    $newItem=$("<div><div class='checkbox material-icons'></div><span class='list_text' contenteditable='true'></span><div class='close material-icons'>close</div></div>");
+                    $newItem.insertAfter($(this).parent());
+                    $(this).blur();
+                    $newItem.find('.list_text').focus();
+                    $(this).find('div').remove();
+                    $newItem.find('.list_text').html('');
+                    refresh();
+                }
+            });
+            $('.list>div').mouseover(function(){
+                $(this).find('.close').addClass('active');
+            });
+            $('.list>div').mouseout(function(){
+                $(this).find('.close').removeClass('active');
+            });
+            $('.list>div>.close').click(function(){
+                $(this).parent().remove();
+            });
+        }
+    </script>
+</html>
